@@ -1,0 +1,27 @@
+# Example configuration for ics_calendar_utils
+# Copy this file to config.yaml and modify as needed
+# Use ${VARIABLE_NAME} for environment variable substitution
+
+app:
+  name: "ics_calendar_utils"
+  version: "0.1.0"
+  debug: false
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: null  # Set to a filename to log to file
+
+# Environment variable examples
+# database:
+#   host: ${DB_HOST}
+#   port: ${DB_PORT}
+#   name: ${DB_NAME}
+#   user: ${DB_USER}
+#   password: ${DB_PASSWORD}
+
+# Add your configuration sections here
+settings:
+  timeout: 30
+  retry_count: 3
+  batch_size: 100
