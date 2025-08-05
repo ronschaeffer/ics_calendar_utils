@@ -23,16 +23,16 @@ def create_calendar(
 ) -> str:
     """
     Simple convenience function to create an ICS calendar from raw events.
-    
+
     Args:
         events: List of raw event dictionaries
         calendar_name: Name for the calendar
         filename: Optional filename to save the ICS file
         field_mapping: Optional field mapping for event processing
-        
+
     Returns:
         ICS calendar content as string
-        
+
     Example:
         >>> events = [
         ...     {
@@ -49,11 +49,11 @@ def create_calendar(
     if field_mapping:
         processor.add_mapping(field_mapping)
     processed_events = processor.process_events(events)
-    
+
     # Generate ICS
     generator = ICSGenerator(calendar_name=calendar_name)
     ics_content = generator.generate_ics(processed_events, filename=filename)
-    
+
     return ics_content
 
 
@@ -66,14 +66,14 @@ def process_and_generate(
 ) -> dict:
     """
     Process events and generate ICS calendar with detailed results.
-    
+
     Args:
         events: List of raw event dictionaries
         calendar_name: Name for the calendar
         output_file: Optional path to save the ICS file
         field_mapping: Optional field mapping for event processing
         validate: Whether to validate events before processing
-        
+
     Returns:
         Dictionary containing:
         - 'ics_content': The generated ICS content
@@ -81,7 +81,7 @@ def process_and_generate(
         - 'processing_errors': List of processing errors
         - 'validation_errors': List of validation errors (if validate=True)
         - 'stats': Statistics about the processed events
-        
+
     Example:
         >>> events = [
         ...     {'event_name': 'Concert', 'event_date': '2024-12-25', 'venue': 'Music Hall'}
@@ -99,22 +99,22 @@ def process_and_generate(
     if field_mapping:
         processor.add_mapping(field_mapping)
     generator = ICSGenerator(calendar_name=calendar_name)
-    
+
     # Process events
     processed_events = processor.process_events(events)
     processing_errors = processor.get_processing_errors()
-    
+
     # Validate if requested
     validation_errors = []
     if validate:
         validation_errors = generator.validate_events(processed_events)
-    
+
     # Generate statistics
     stats = generator.get_ics_stats(processed_events)
-    
+
     # Generate ICS content
     ics_content = generator.generate_ics(processed_events, filename=output_file)
-    
+
     return {
         'ics_content': ics_content,
         'processed_events': processed_events,

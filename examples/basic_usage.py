@@ -12,7 +12,7 @@ from ics_calendar_utils import create_calendar, process_and_generate
 def basic_example():
     """Basic example using the simple create_calendar function."""
     print("=== Basic Example ===")
-    
+
     # Sample events with common field names
     events = [
         {
@@ -36,14 +36,14 @@ def basic_example():
             'description': 'New Year celebration'
         }
     ]
-    
+
     # Simple field mapping for common names
     field_mapping = {
         'title': 'summary',
         'date': 'dtstart_date',
         'time': 'dtstart_time'
     }
-    
+
     # Generate calendar
     ics_content = create_calendar(
         events,
@@ -51,7 +51,7 @@ def basic_example():
         filename="work_events.ics",
         field_mapping=field_mapping
     )
-    
+
     print(f"Generated calendar with {len(events)} events")
     print("Saved to: work_events.ics")
     print(f"Preview (first 200 chars): {ics_content[:200]}...")
@@ -60,7 +60,7 @@ def basic_example():
 def advanced_example():
     """Advanced example with custom field mapping and detailed results."""
     print("\n=== Advanced Example ===")
-    
+
     # Events with custom field names (like from a specific API or CSV)
     events = [
         {
@@ -80,7 +80,7 @@ def advanced_example():
             'ticket_url': 'https://example.com/tickets/124'
         }
     ]
-    
+
     # Custom field mapping for rugby events
     field_mapping = {
         'event_name': 'summary',
@@ -90,7 +90,7 @@ def advanced_example():
         'competition': 'categories',
         'ticket_url': 'url'
     }
-    
+
     # Generate with detailed results
     result = process_and_generate(
         events,
@@ -99,33 +99,33 @@ def advanced_example():
         field_mapping=field_mapping,
         validate=True
     )
-    
+
     # Display results
     print(f"Processed {result['stats']['total_events']} events")
     print(f"Events with time: {result['stats']['events_with_time']}")
     print(f"Events with location: {result['stats']['events_with_location']}")
     print(f"Events with URL: {result['stats']['events_with_url']}")
-    
+
     if result['processing_errors']:
         print(f"Processing errors: {len(result['processing_errors'])}")
         for error in result['processing_errors']:
             print(f"  - {error}")
-    
+
     if result['validation_errors']:
         print(f"Validation errors: {len(result['validation_errors'])}")
         for error in result['validation_errors']:
             print(f"  - {error}")
-    
+
     if result['stats']['date_range']['earliest']:
         print(f"Date range: {result['stats']['date_range']['earliest']} to {result['stats']['date_range']['latest']}")
-    
+
     print("Saved to: rugby_fixtures.ics")
 
 
 def error_handling_example():
     """Example showing error handling for problematic data."""
     print("\n=== Error Handling Example ===")
-    
+
     # Events with some problematic data
     events = [
         {
@@ -149,13 +149,13 @@ def error_handling_example():
             'time': '16:00'
         }
     ]
-    
+
     field_mapping = {
         'name': 'summary',
         'date': 'dtstart_date',
         'time': 'dtstart_time'
     }
-    
+
     # Process with validation to see errors
     result = process_and_generate(
         events,
@@ -163,15 +163,15 @@ def error_handling_example():
         field_mapping=field_mapping,
         validate=True
     )
-    
+
     print(f"Input events: {len(events)}")
     print(f"Successfully processed: {result['stats']['total_events']}")
-    
+
     if result['processing_errors']:
         print(f"\nProcessing errors ({len(result['processing_errors'])}):")
         for error in result['processing_errors']:
             print(f"  - {error}")
-    
+
     if result['validation_errors']:
         print(f"\nValidation errors ({len(result['validation_errors'])}):")
         for error in result['validation_errors']:
@@ -183,6 +183,6 @@ if __name__ == "__main__":
     basic_example()
     advanced_example()
     error_handling_example()
-    
+
     print("\n=== Example Complete ===")
     print("Check the generated .ics files to see the results!")

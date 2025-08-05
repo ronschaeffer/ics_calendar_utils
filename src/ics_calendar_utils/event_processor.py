@@ -14,11 +14,11 @@ from typing import Any
 class EventProcessor:
     """
     Processes and normalizes event data from various sources.
-    
+
     Handles date/time parsing, venue normalization, and field mapping
     to prepare events for ICS calendar generation.
     """
-    
+
     def __init__(self):
         """Initialize the event processor with default field mappings."""
         self.field_mappings = {
@@ -30,29 +30,29 @@ class EventProcessor:
             'end_time': 'dtend_time'
         }
         self.error_log = []
-    
+
     def add_mapping(self, mappings: dict[str, str]) -> None:
         """
         Add or update field mappings for event processing.
-        
+
         Args:
             mappings: Dictionary mapping source fields to ICS fields
         """
         self.field_mappings.update(mappings)
-    
+
     def normalize_time(self, time_str: str | None) -> str | None:
         """
         Normalize time format, returning a list of sorted times.
-        
+
         Handles various time formats like:
         - "15:30"
         - "3:30pm"
         - "15:30 & 17:45"
         - "TBC"
-        
+
         Args:
             time_str: Raw time string from source data
-            
+
         Returns:
             List of normalized time strings in 24-hour format, or None if invalid
         """
@@ -77,7 +77,7 @@ class EventProcessor:
         def parse_single_time(time_part: str, shared_meridian: str | None = None) -> str | None:
             time_part = time_part.strip().lower()
             meridian = shared_meridian
-            
+
             if "pm" in time_part:
                 meridian = "pm"
                 time_part = time_part.replace("pm", "").strip()
@@ -126,12 +126,12 @@ class EventProcessor:
     def normalize_date_range(self, date_str: str | None) -> str | None:
         """
         Normalizes a variety of date string formats to 'YYYY-MM-DD'.
-        
+
         Handles date ranges by taking the start date.
-        
+
         Args:
             date_str: Raw date string from source data
-            
+
         Returns:
             ISO format date string (YYYY-MM-DD) or None if invalid
         """
@@ -140,14 +140,14 @@ class EventProcessor:
 
         # Pre-process the string to handle various formats
         cleaned_str = date_str.lower()
-        
+
         # Remove day names, ordinals, and 'weekend' markers
         cleaned_str = re.sub(
             r"\b(mon|tue|wed|thu|fri|sat|sun|monday|tuesday|wednesday|thursday|friday|saturday|sunday|weekend|wknd)\b",
             "",
             cleaned_str,
         ).strip()
-        
+
         cleaned_str = re.sub(r"(\d+)(st|nd|rd|th)", r"\1", cleaned_str)
 
         # Handle date ranges like '16/17 May 2025' by taking the first day part
@@ -165,7 +165,7 @@ class EventProcessor:
             cleaned_str = f"{day} {month} {year}"
         else:
             cleaned_str = cleaned_str.replace(",", "")
-        
+
         cleaned_str = cleaned_str.replace("-", " ").replace("/", " ").replace(".", " ")
         cleaned_str = re.sub(r"\s+", " ", cleaned_str).strip()
 
@@ -200,16 +200,16 @@ class EventProcessor:
     def process_events(self, raw_events: list[dict[str, Any]]) -> list[dict[str, Any]]:
         """
         Process a list of raw events into normalized format.
-        
+
         Args:
             raw_events: List of raw event dictionaries from various sources
-            
+
         Returns:
             List of normalized event dictionaries ready for ICS generation
         """
         self.error_log.clear()
         processed_events = []
-        
+
         for i, raw_event in enumerate(raw_events):
             try:
                 processed_event = self._process_single_event(raw_event)
@@ -217,18 +217,18 @@ class EventProcessor:
                     processed_events.append(processed_event)
             except Exception as e:
                 self.error_log.append(f"Error processing event {i}: {e}")
-                
+
         return processed_events
-    
+
     def _process_single_event(self, raw_event: dict[str, Any]) -> dict[str, Any] | None:
         """Process a single raw event into normalized format."""
         processed = {}
-        
+
         # Map fields according to configured mappings
         for source_field, target_field in self.field_mappings.items():
             if source_field in raw_event and raw_event[source_field] is not None:
                 value = raw_event[source_field]
-                
+
                 # Special processing for different field types
                 if target_field == 'dtstart_date':
                     value = self.normalize_date_range(value)
@@ -238,13 +238,13 @@ class EventProcessor:
                     value = self.normalize_time(value)
                     if not value:
                         continue  # Skip this field if time is invalid
-                
+
                 processed[target_field] = value
-        
+
         # Ensure we have required fields
         if 'summary' not in processed:
             processed['summary'] = raw_event.get('fixture', 'Untitled Event')
-        
+
         return processed
 
     def get_processing_errors(self) -> list[str]:
