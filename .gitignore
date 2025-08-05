@@ -81,3 +81,4 @@ config/local_*
 .cache/
 temp/
 tmp/
+*.ics
