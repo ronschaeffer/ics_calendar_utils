@@ -17,7 +17,7 @@ def create_calendar(
     events: list[dict],
     calendar_name: str = "Generated Calendar",
     filename: str | None = None,
-    field_mapping: dict[str, str] | None = None
+    field_mapping: dict[str, str] | None = None,
 ) -> str:
     """
     Simple convenience function to create an ICS calendar from raw events.
@@ -60,7 +60,7 @@ def process_and_generate(
     calendar_name: str = "Generated Calendar",
     output_file: str | None = None,
     field_mapping: dict[str, str] | None = None,
-    validate: bool = True
+    validate: bool = True,
 ) -> dict:
     """
     Process events and generate ICS calendar with detailed results.
@@ -114,11 +114,11 @@ def process_and_generate(
     ics_content = generator.generate_ics(processed_events, filename=output_file)
 
     return {
-        'ics_content': ics_content,
-        'processed_events': processed_events,
-        'processing_errors': processing_errors,
-        'validation_errors': validation_errors,
-        'stats': stats
+        "ics_content": ics_content,
+        "processed_events": processed_events,
+        "processing_errors": processing_errors,
+        "validation_errors": validation_errors,
+        "stats": stats,
     }
 
 

@@ -19,7 +19,9 @@ class ICSGenerator:
     calendar applications.
     """
 
-    def __init__(self, calendar_name: str = "Generated Calendar", timezone: str = "UTC"):
+    def __init__(
+        self, calendar_name: str = "Generated Calendar", timezone: str = "UTC"
+    ):
         """
         Initialize the ICS generator.
 
@@ -31,7 +33,9 @@ class ICSGenerator:
         self.timezone = timezone
         self.prodid = "-//ICS Calendar Utils//Event Calendar//EN"
 
-    def generate_ics(self, events: list[dict[str, Any]], filename: str | None = None) -> str:
+    def generate_ics(
+        self, events: list[dict[str, Any]], filename: str | None = None
+    ) -> str:
         """
         Generate an ICS calendar from processed events.
 
@@ -66,7 +70,7 @@ class ICSGenerator:
             f"X-WR-CALNAME:{self.calendar_name}",
             "X-WR-TIMEZONE:Europe/London",
             "CALSCALE:GREGORIAN",
-            "METHOD:PUBLISH"
+            "METHOD:PUBLISH",
         ]
 
     def _create_event_component(self, event: dict[str, Any]) -> list[str]:
@@ -90,54 +94,58 @@ class ICSGenerator:
         lines.append(f"DTSTAMP:{dtstamp}")
 
         # Event start time
-        if event.get('dtstart_date') and event.get('dtstart_time'):
-            dtstart = self._format_datetime(event['dtstart_date'], event['dtstart_time'])
+        if event.get("dtstart_date") and event.get("dtstart_time"):
+            dtstart = self._format_datetime(
+                event["dtstart_date"], event["dtstart_time"]
+            )
             lines.append(f"DTSTART:{dtstart}")
-        elif event.get('dtstart_date'):
+        elif event.get("dtstart_date"):
             # All-day event
-            date_only = event['dtstart_date'].replace('-', '')
+            date_only = event["dtstart_date"].replace("-", "")
             lines.append(f"DTSTART;VALUE=DATE:{date_only}")
 
         # Event end time
-        if event.get('dtend_date') and event.get('dtend_time'):
-            dtend = self._format_datetime(event['dtend_date'], event['dtend_time'])
+        if event.get("dtend_date") and event.get("dtend_time"):
+            dtend = self._format_datetime(event["dtend_date"], event["dtend_time"])
             lines.append(f"DTEND:{dtend}")
-        elif event.get('dtstart_date') and not event.get('dtend_date'):
+        elif event.get("dtstart_date") and not event.get("dtend_date"):
             # Single day event - end same day
-            if event.get('dtstart_time'):
+            if event.get("dtstart_time"):
                 # Assume 2-hour duration if no end time
-                dtend = self._add_duration(event['dtstart_date'], event['dtstart_time'], 2)
+                dtend = self._add_duration(
+                    event["dtstart_date"], event["dtstart_time"], 2
+                )
                 lines.append(f"DTEND:{dtend}")
             else:
                 # All-day event - next day
-                next_day = self._add_day(event['dtstart_date'])
+                next_day = self._add_day(event["dtstart_date"])
                 lines.append(f"DTEND;VALUE=DATE:{next_day.replace('-', '')}")
 
         # Event summary (title)
-        if event.get('summary'):
-            summary = self._escape_ics_text(event['summary'])
+        if event.get("summary"):
+            summary = self._escape_ics_text(event["summary"])
             lines.append(f"SUMMARY:{summary}")
 
         # Event description
-        if event.get('description'):
-            description = self._escape_ics_text(event['description'])
+        if event.get("description"):
+            description = self._escape_ics_text(event["description"])
             lines.append(f"DESCRIPTION:{description}")
 
         # Event location
-        if event.get('location'):
-            location = self._escape_ics_text(event['location'])
+        if event.get("location"):
+            location = self._escape_ics_text(event["location"])
             lines.append(f"LOCATION:{location}")
 
         # Event URL
-        if event.get('url'):
+        if event.get("url"):
             lines.append(f"URL:{event['url']}")
 
         # Event categories/tags
-        if event.get('categories'):
-            if isinstance(event['categories'], list):
-                categories = ",".join(event['categories'])
+        if event.get("categories"):
+            if isinstance(event["categories"], list):
+                categories = ",".join(event["categories"])
             else:
-                categories = str(event['categories'])
+                categories = str(event["categories"])
             lines.append(f"CATEGORIES:{categories}")
 
         lines.append("END:VEVENT")
@@ -155,8 +163,8 @@ class ICSGenerator:
             ICS datetime string in YYYYMMDDTHHMMSSZ format
         """
         try:
-            date_part = date_str.replace('-', '')
-            time_part = time_str.replace(':', '') + "00"  # Add seconds
+            date_part = date_str.replace("-", "")
+            time_part = time_str.replace(":", "") + "00"  # Add seconds
 
             # For now, assume UTC timezone
             return f"{date_part}T{time_part}Z"
@@ -217,10 +225,10 @@ class ICSGenerator:
         # ICS escaping rules
         text = str(text)
         text = text.replace("\\", "\\\\")  # Escape backslashes first
-        text = text.replace(";", "\\;")    # Escape semicolons
-        text = text.replace(",", "\\,")    # Escape commas
-        text = text.replace("\n", "\\n")   # Escape newlines
-        text = text.replace("\r", "")      # Remove carriage returns
+        text = text.replace(";", "\\;")  # Escape semicolons
+        text = text.replace(",", "\\,")  # Escape commas
+        text = text.replace("\n", "\\n")  # Escape newlines
+        text = text.replace("\r", "")  # Remove carriage returns
 
         return text
 
@@ -233,7 +241,7 @@ class ICSGenerator:
             filename: Path to save file
         """
         try:
-            with open(filename, 'w', encoding='utf-8', newline='') as f:
+            with open(filename, "w", encoding="utf-8", newline="") as f:
                 f.write(content)
         except OSError as e:
             raise OSError(f"Failed to save ICS file: {e}") from e
@@ -254,27 +262,27 @@ class ICSGenerator:
             event_errors = []
 
             # Check required fields
-            if not event.get('summary'):
+            if not event.get("summary"):
                 event_errors.append("Missing summary/title")
 
-            if not event.get('dtstart_date'):
+            if not event.get("dtstart_date"):
                 event_errors.append("Missing start date")
             else:
                 # Validate date format
                 try:
-                    datetime.strptime(event['dtstart_date'], "%Y-%m-%d")
+                    datetime.strptime(event["dtstart_date"], "%Y-%m-%d")
                 except ValueError:
                     event_errors.append(f"Invalid date format: {event['dtstart_date']}")
 
             # Validate time format if present
-            if event.get('dtstart_time'):
+            if event.get("dtstart_time"):
                 try:
-                    datetime.strptime(event['dtstart_time'], "%H:%M")
+                    datetime.strptime(event["dtstart_time"], "%H:%M")
                 except ValueError:
                     event_errors.append(f"Invalid time format: {event['dtstart_time']}")
 
             if event_errors:
-                errors.append(f"Event {i+1}: {'; '.join(event_errors)}")
+                errors.append(f"Event {i + 1}: {'; '.join(event_errors)}")
 
         return errors
 
@@ -289,35 +297,35 @@ class ICSGenerator:
             Dictionary with statistics
         """
         stats = {
-            'total_events': len(events),
-            'events_with_time': 0,
-            'all_day_events': 0,
-            'events_with_location': 0,
-            'events_with_url': 0,
-            'date_range': {'earliest': None, 'latest': None}
+            "total_events": len(events),
+            "events_with_time": 0,
+            "all_day_events": 0,
+            "events_with_location": 0,
+            "events_with_url": 0,
+            "date_range": {"earliest": None, "latest": None},
         }
 
         dates = []
 
         for event in events:
             # Count events with time
-            if event.get('dtstart_time'):
-                stats['events_with_time'] += 1
+            if event.get("dtstart_time"):
+                stats["events_with_time"] += 1
             else:
-                stats['all_day_events'] += 1
+                stats["all_day_events"] += 1
 
             # Count events with location
-            if event.get('location'):
-                stats['events_with_location'] += 1
+            if event.get("location"):
+                stats["events_with_location"] += 1
 
             # Count events with URL
-            if event.get('url'):
-                stats['events_with_url'] += 1
+            if event.get("url"):
+                stats["events_with_url"] += 1
 
             # Collect dates for range calculation
-            if event.get('dtstart_date'):
+            if event.get("dtstart_date"):
                 try:
-                    date_obj = datetime.strptime(event['dtstart_date'], "%Y-%m-%d")
+                    date_obj = datetime.strptime(event["dtstart_date"], "%Y-%m-%d")
                     dates.append(date_obj)
                 except ValueError:
                     pass
@@ -325,7 +333,7 @@ class ICSGenerator:
         # Calculate date range
         if dates:
             dates.sort()
-            stats['date_range']['earliest'] = dates[0].strftime("%Y-%m-%d")
-            stats['date_range']['latest'] = dates[-1].strftime("%Y-%m-%d")
+            stats["date_range"]["earliest"] = dates[0].strftime("%Y-%m-%d")
+            stats["date_range"]["latest"] = dates[-1].strftime("%Y-%m-%d")
 
         return stats

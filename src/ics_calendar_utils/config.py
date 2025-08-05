@@ -35,19 +35,21 @@ class Config:
             from dotenv import load_dotenv
 
             # Load shared environment first (if exists)
-            parent_env = Path(__file__).parent.parent.parent.parent / '.env'
+            parent_env = Path(__file__).parent.parent.parent.parent / ".env"
             if parent_env.exists():
                 load_dotenv(parent_env, verbose=False)
                 print(f"✅ Loaded shared environment from: {parent_env}")
 
             # Load project-specific environment second (overrides shared)
-            project_env = Path(__file__).parent.parent.parent / '.env'
+            project_env = Path(__file__).parent.parent.parent / ".env"
             if project_env.exists():
                 load_dotenv(project_env, override=True, verbose=False)
                 print(f"✅ Loaded project environment from: {project_env}")
 
         except ImportError:
-            print("⚠️  python-dotenv not installed. Install with: poetry add python-dotenv")
+            print(
+                "⚠️  python-dotenv not installed. Install with: poetry add python-dotenv"
+            )
 
     def _load_config(self) -> dict[str, Any]:
         """Load configuration from file with environment variable substitution."""
@@ -76,7 +78,7 @@ class Config:
                 var_name = match.group(1)
                 return os.environ.get(var_name, match.group(0))
 
-            return re.sub(r'\$\{([^}]+)\}', replacer, obj)
+            return re.sub(r"\$\{([^}]+)\}", replacer, obj)
         else:
             return obj
 
@@ -96,7 +98,7 @@ class Config:
                 "timeout": 30,
                 "retry_count": 3,
                 "batch_size": 100,
-            }
+            },
         }
 
     def get(self, key: str, default: Any = None) -> Any:
@@ -109,7 +111,7 @@ class Config:
         Returns:
             Configuration value or default
         """
-        keys = key.split('.')
+        keys = key.split(".")
         value = self._config
 
         for k in keys:
@@ -127,7 +129,7 @@ class Config:
             key: Configuration key (e.g., 'app.debug')
             value: Value to set
         """
-        keys = key.split('.')
+        keys = key.split(".")
         config = self._config
 
         for k in keys[:-1]:
@@ -141,7 +143,7 @@ class Config:
         """Save current configuration to file."""
         self.config_path.parent.mkdir(parents=True, exist_ok=True)
 
-        with open(self.config_path, 'w') as f:
+        with open(self.config_path, "w") as f:
             yaml.dump(self._config, f, default_flow_style=False, indent=2)
 
 

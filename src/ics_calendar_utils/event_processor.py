@@ -22,12 +22,12 @@ class EventProcessor:
     def __init__(self):
         """Initialize the event processor with default field mappings."""
         self.field_mappings = {
-            'fixture': 'summary',
-            'start_time': 'dtstart_time',
-            'date': 'dtstart_date',
-            'crowd': 'description',
-            'venue': 'location',
-            'end_time': 'dtend_time'
+            "fixture": "summary",
+            "start_time": "dtstart_time",
+            "date": "dtstart_date",
+            "crowd": "description",
+            "venue": "location",
+            "end_time": "dtend_time",
         }
         self.error_log = []
 
@@ -74,7 +74,9 @@ class EventProcessor:
         def is_valid_time(hour: int, minute: int) -> bool:
             return 0 <= hour <= 23 and 0 <= minute <= 59
 
-        def parse_single_time(time_part: str, shared_meridian: str | None = None) -> str | None:
+        def parse_single_time(
+            time_part: str, shared_meridian: str | None = None
+        ) -> str | None:
             time_part = time_part.strip().lower()
             meridian = shared_meridian
 
@@ -230,11 +232,11 @@ class EventProcessor:
                 value = raw_event[source_field]
 
                 # Special processing for different field types
-                if target_field == 'dtstart_date':
+                if target_field == "dtstart_date":
                     value = self.normalize_date_range(value)
                     if not value:
                         return None  # Skip events with invalid dates
-                elif target_field == 'dtstart_time' or target_field == 'dtend_time':
+                elif target_field == "dtstart_time" or target_field == "dtend_time":
                     value = self.normalize_time(value)
                     if not value:
                         continue  # Skip this field if time is invalid
@@ -242,8 +244,8 @@ class EventProcessor:
                 processed[target_field] = value
 
         # Ensure we have required fields
-        if 'summary' not in processed:
-            processed['summary'] = raw_event.get('fixture', 'Untitled Event')
+        if "summary" not in processed:
+            processed["summary"] = raw_event.get("fixture", "Untitled Event")
 
         return processed
 
