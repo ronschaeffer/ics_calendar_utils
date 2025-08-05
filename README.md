@@ -5,25 +5,25 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Tests](https://github.com/ronschaeffer/ics-calendar-utils/workflows/Tests/badge.svg)](https://github.com/ronschaeffer/ics-calendar-utils/actions)
 
-A powerful Python library for processing events and generating standards-compliant ICS calendar files from various data sources.
+A Python library for processing events and generating ICS calendar files from various data sources.
 
 ## ✨ Features
 
-- **🔄 Flexible Event Processing**: Normalize events from any source with customizable field mappings
-- **🧠 Intelligent Date/Time Parsing**: Handles dozens of date and time formats automatically
-- **📊 Event Validation**: Built-in validation ensures data quality before calendar generation
-- **📈 Statistics & Analytics**: Get insights about your event data
-- **🛡️ Robust Error Handling**: Graceful handling of invalid data with detailed error reporting
-- **🎯 Standards Compliant**: Generates proper RFC 5545 compliant ICS calendar files
-- **🔧 Modern Python**: Built with Python 3.11+ type hints and best practices
+- **Event Processing**: Normalize events from any source with customizable field mappings
+- **Date/Time Parsing**: Handles various date and time formats automatically
+- **Event Validation**: Built-in validation ensures data quality before calendar generation
+- **Statistics & Analytics**: Get insights about your event data
+- **Error Handling**: Graceful handling of invalid data with detailed error reporting
+- **ICS Generation**: Generates RFC 5545 compliant ICS calendar files
+- **Modern Python**: Built with Python 3.11+ type hints and best practices
 
-## 🚀 Quick Start
-
-### Installation
+## � Installation
 
 ```bash
 pip install ics-calendar-utils
 ```
+
+## 🚀 Usage
 
 ### Basic Usage
 
@@ -64,7 +64,7 @@ ics_content = create_calendar(
 print("Calendar generated successfully!")
 ```
 
-## 📖 Documentation
+## ⚙️ Configuration
 
 ### Advanced Usage
 
@@ -143,7 +143,7 @@ ics_content = generator.generate_ics(processed_events)
 
 ## 🎯 Supported Date/Time Formats
 
-The library intelligently parses various date and time formats:
+The library parses various date and time formats:
 
 ### Date Formats
 - ISO format: `2024-12-20`
@@ -159,7 +159,7 @@ The library intelligently parses various date and time formats:
 
 ## 🧪 Error Handling
 
-The library provides comprehensive error handling:
+The library provides error handling:
 
 ```python
 result = process_and_generate(events, validate=True)
@@ -220,11 +220,11 @@ poetry run ruff check --fix
 
 ## 📋 Examples
 
-Check out the [`examples/`](examples/) directory for complete working examples:
+Check out the [`examples/`](examples/) directory for working examples:
 
 - **Basic Usage**: Simple calendar generation
-- **Advanced Processing**: Custom field mapping and error handling
-- **Rugby Fixtures**: Real-world sports calendar example
+- **Processing Examples**: Custom field mapping and error handling
+- **Rugby Fixtures**: Sports calendar example
 
 ## 🤝 Contributing
 
@@ -250,8 +250,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Built with modern Python practices and type safety
 - Follows RFC 5545 iCalendar specification
-- Inspired by real-world calendar integration needs
+- Designed for calendar integration needs
 
 ---
 
-*Made with ❤️ for the Python community*
+**This README follows the [README Style Guide](../README_STYLE_GUIDE.md) for consistency across all projects.**
