@@ -3,7 +3,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "ics_calendar_utils"
+name = "ronschaeffer-ics-calendar-utils"
 version = "0.1.0"
 description = "Python utility library for generating and manipulating ICS calendar files"
 authors = ["ronschaeffer"]
