@@ -1,9 +1,8 @@
 """
-ICS Calendar Utils
+ICS Calendar Utils - Python utility library for generating and manipulating ICS calendar files.
 
-A Python library for processing events and generating ICS calendar files.
-Provides tools to normalize event data from various sources and create
-standards-compliant ICS calendars.
+This library provides tools for processing events from various sources and generating
+RFC 5545 compliant ICS calendar files.
 """
 
 from .event_processor import EventProcessor
@@ -11,7 +10,6 @@ from .ics_generator import ICSGenerator
 
 __version__ = "0.1.0"
 __author__ = "ronschaeffer"
-__email__ = "ron@ronschaeffer.com"
 __all__ = ["EventProcessor", "ICSGenerator", "create_calendar", "process_and_generate"]
 
 

@@ -3,7 +3,7 @@
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![PyPI version](https://badge.fury.io/py/ics-calendar-utils.svg)](https://badge.fury.io/py/ics-calendar-utils)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Tests](https://github.com/ronschaeffer/ics-calendar-utils/workflows/Tests/badge.svg)](https://github.com/ronschaeffer/ics-calendar-utils/actions)
+[![Tests](https://github.com/ronschaeffer/ics_calendar_utils/workflows/CI/badge.svg)](https://github.com/ronschaeffer/ics_calendar_utils/actions)
 
 A Python library for processing events and generating ICS calendar files from various data sources.
 
@@ -226,32 +226,22 @@ Check out the [`examples/`](examples/) directory for working examples:
 - **Processing Examples**: Custom field mapping and error handling
 - **Rugby Fixtures**: Sports calendar example
 
-## 🤝 Contributing
+## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👨‍💻 Author
+## Author
 
-**Ron Schaeffer**
-- Email: ron@ronschaeffer.com
-- GitHub: [@ronschaeffer](https://github.com/ronschaeffer)
+- **ronschaeffer** - [GitHub](https://github.com/ronschaeffer)
 
-## 🙏 Acknowledgments
-
-- Built with modern Python practices and type safety
-- Follows RFC 5545 iCalendar specification
-- Designed for calendar integration needs
+## Acknowledgments
 
 ---
 
-**This README follows the [README Style Guide](../README_STYLE_GUIDE.md) for consistency across all projects.**
+## 📞 Support
+
+For questions, issues, or contributions, please open an issue on GitHub.
