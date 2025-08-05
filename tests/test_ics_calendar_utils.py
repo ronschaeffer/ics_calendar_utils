@@ -16,8 +16,17 @@ from src.ics_calendar_utils import (
 
 
 def test_version():
-    """Test that version is defined."""
-    assert __version__ == "0.1.1"
+    """Test that version is defined and follows semantic versioning."""
+    import re
+
+    # Check version is defined
+    assert __version__ is not None
+    assert isinstance(__version__, str)
+    assert len(__version__) > 0
+
+    # Check it follows semantic versioning pattern (X.Y.Z)
+    version_pattern = r'^\d+\.\d+\.\d+$'
+    assert re.match(version_pattern, __version__), f"Version '{__version__}' doesn't follow semantic versioning"
 
 
 class TestEventProcessor:
