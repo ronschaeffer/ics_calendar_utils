@@ -17,7 +17,7 @@ from src.ics_calendar_utils import (
 
 def test_version():
     """Test that version is defined."""
-    assert __version__ == "0.1.0"
+    assert __version__ == "0.1.1"
 
 
 class TestEventProcessor:
