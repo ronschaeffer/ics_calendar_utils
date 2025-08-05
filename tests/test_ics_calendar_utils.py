@@ -25,8 +25,10 @@ def test_version():
     assert len(__version__) > 0
 
     # Check it follows semantic versioning pattern (X.Y.Z)
-    version_pattern = r'^\d+\.\d+\.\d+$'
-    assert re.match(version_pattern, __version__), f"Version '{__version__}' doesn't follow semantic versioning"
+    version_pattern = r"^\d+\.\d+\.\d+$"
+    assert re.match(version_pattern, __version__), (
+        f"Version '{__version__}' doesn't follow semantic versioning"
+    )
 
 
 class TestEventProcessor:
@@ -78,6 +80,58 @@ class TestEventProcessor:
             ("2pm", "14:00"),
             ("noon", "12:00"),
             ("12:00pm", "12:00"),
+            ("12:00am", "00:00"),
+            ("3:45AM", "03:45"),
+            ("11:59PM", "23:59"),
+            ("1pm", "13:00"),
+            ("12pm", "12:00"),
+        ]
+
+        for input_time, expected in test_cases:
+            result = processor.normalize_time(input_time)
+            assert result == expected, (
+                f"Failed for {input_time}: got {result}, expected {expected}"
+            )
+
+    def test_time_normalization_edge_cases(self):
+        """Test edge cases for time normalization."""
+        processor = EventProcessor()
+
+        # Test invalid/edge cases
+        invalid_cases = [
+            None,
+            "",
+            "TBC",
+            "tbc",
+            "invalid",
+            "25:00",
+            "12:60",
+            "midnight",  # Not supported like noon
+        ]
+
+        for invalid_input in invalid_cases:
+            result = processor.normalize_time(invalid_input)
+            assert result is None, (
+                f"Should return None for invalid input: {invalid_input}"
+            )
+
+    def test_time_normalization_special_cases(self):
+        """Test special time normalization cases."""
+        processor = EventProcessor()
+
+        # Test that "noon." gets processed (extracts "noon")
+        result = processor.normalize_time("noon.")
+        assert result == "12:00", "Should extract noon from 'noon.'"
+
+    def test_time_normalization_multiple_times(self):
+        """Test time normalization with multiple times (should return first)."""
+        processor = EventProcessor()
+
+        # Test cases with multiple times - should return the earliest
+        test_cases = [
+            ("2:30pm & 4:00pm", "14:30"),  # Should return first time
+            ("15:30 & 17:45", "15:30"),
+            ("3pm and 5pm", "15:00"),
         ]
 
         for input_time, expected in test_cases:
@@ -95,6 +149,12 @@ class TestEventProcessor:
             ("20/12/2024", "2024-12-20"),
             ("Dec 20, 2024", "2024-12-20"),
             ("20 December 2024", "2024-12-20"),
+            ("20 Dec 2024", "2024-12-20"),
+            ("16 may 2025", "2025-05-16"),
+            ("16 May 2025", "2025-05-16"),
+            ("16/05/2025", "2025-05-16"),
+            ("05/16/2025", "2025-05-16"),  # US format
+            ("2025-05-16", "2025-05-16"),  # ISO format
         ]
 
         for input_date, expected in test_cases:
@@ -102,6 +162,140 @@ class TestEventProcessor:
             assert result == expected, (
                 f"Failed for {input_date}: got {result}, expected {expected}"
             )
+
+    def test_date_normalization_edge_cases(self):
+        """Test edge cases for date normalization."""
+        processor = EventProcessor()
+
+        # Test invalid dates
+        invalid_cases = [
+            None,
+            "",
+            "invalid-date",
+            "32/12/2024",  # Invalid day
+            "12/32/2024",  # Invalid day in US format
+            "2024-13-01",  # Invalid month
+            "not a date",
+            "TBC",
+        ]
+
+        for invalid_input in invalid_cases:
+            result = processor.normalize_date_range(invalid_input)
+            assert result is None, (
+                f"Should return None for invalid input: {invalid_input}"
+            )
+
+    def test_date_normalization_ranges(self):
+        """Test date range handling (should return first date)."""
+        processor = EventProcessor()
+
+        # Test date ranges - should return the first date
+        test_cases = [
+            ("16/17 May 2025", "2025-05-16"),  # Weekend format
+        ]
+
+        for input_date, expected in test_cases:
+            result = processor.normalize_date_range(input_date)
+            assert result == expected, (
+                f"Failed for {input_date}: got {result}, expected {expected}"
+            )
+
+    def test_date_normalization_with_day_names(self):
+        """Test date normalization with day names that should be stripped."""
+        processor = EventProcessor()
+
+        test_cases = [
+            ("Saturday 20 December 2024", "2024-12-20"),
+            ("Sun 16 May 2025", "2025-05-16"),
+            ("weekend 20/12/2024", "2024-12-20"),
+        ]
+
+        for input_date, expected in test_cases:
+            result = processor.normalize_date_range(input_date)
+            assert result == expected, (
+                f"Failed for {input_date}: got {result}, expected {expected}"
+            )
+
+    def test_error_logging(self):
+        """Test that processing errors are properly logged."""
+        processor = EventProcessor()
+
+        # Clear any existing errors
+        processor.error_log.clear()
+
+        # Test invalid time that should generate error
+        result = processor.normalize_time("invalid-time")
+        assert result is None
+        errors = processor.get_processing_errors()
+        assert len(errors) > 0
+        assert "No valid time patterns found" in errors[0]
+
+        # Clear and test invalid date
+        processor.error_log.clear()
+        result = processor.normalize_date_range("invalid-date")
+        assert result is None
+        errors = processor.get_processing_errors()
+        assert len(errors) > 0
+        assert "Failed to parse date" in errors[0]
+
+    def test_event_processing_with_errors(self):
+        """Test event processing when some events have errors."""
+        processor = EventProcessor()
+
+        events = [
+            {
+                "fixture": "Good Event",
+                "date": "2024-12-20",
+                "start_time": "14:00",
+                "venue": "Test Venue",
+            },
+            {
+                "fixture": "Bad Date Event",
+                "date": "invalid-date",
+                "start_time": "15:00",
+                "venue": "Test Venue",
+            },
+            {
+                "fixture": "Bad Time Event",
+                "date": "2024-12-21",
+                "start_time": "invalid-time",
+                "venue": "Test Venue",
+            },
+        ]
+
+        processed = processor.process_events(events)
+
+        # Should process the good event and the bad time event (without time)
+        assert len(processed) == 2
+        assert processed[0]["summary"] == "Good Event"
+        assert processed[1]["summary"] == "Bad Time Event"
+        assert "dtstart_time" in processed[0]  # Good event has time
+        assert "dtstart_time" not in processed[1]  # Bad time event skips time field
+
+        # Should have logged errors
+        errors = processor.get_processing_errors()
+        assert len(errors) > 0
+
+    def test_fallback_summary_handling(self):
+        """Test fallback when summary field is missing."""
+        processor = EventProcessor()
+
+        events = [
+            {
+                "fixture": "Test Event",  # This should become summary
+                "date": "2024-12-20",
+            },
+            {
+                # No fixture or title - should get default
+                "date": "2024-12-21",
+            },
+        ]
+
+        processed = processor.process_events(events)
+
+        assert len(processed) == 2
+        assert processed[0]["summary"] == "Test Event"
+        assert processed[1]["summary"] == "Untitled Event"  # Default fallback
 
 
 class TestICSGenerator:
@@ -151,6 +345,64 @@ class TestICSGenerator:
 
         errors = generator.validate_events(invalid_events)
         assert len(errors) == 2
+
+    def test_event_validation_edge_cases(self):
+        """Test event validation with various edge cases."""
+        generator = ICSGenerator()
+
+        # Test empty events list
+        errors = generator.validate_events([])
+        assert len(errors) == 0
+
+        # Test event with empty summary
+        empty_summary_events = [{"summary": "", "dtstart_date": "2024-12-20"}]
+        errors = generator.validate_events(empty_summary_events)
+        assert len(errors) == 1
+
+        # Test event with whitespace-only summary - this is actually valid according to the implementation
+        whitespace_summary_events = [{"summary": "   ", "dtstart_date": "2024-12-20"}]
+        errors = generator.validate_events(whitespace_summary_events)
+        assert len(errors) == 0  # Whitespace summary is considered valid
+
+    def test_ics_generation_with_all_fields(self):
+        """Test ICS generation with all possible fields."""
+        generator = ICSGenerator(calendar_name="Complete Test Calendar")
+
+        events = [
+            {
+                "summary": "Complete Event",
+                "dtstart_date": "2024-12-20",
+                "dtstart_time": "14:00",
+                "dtend_time": "16:00",
+                "location": "Test Location",
+                "description": "Test Description",
+                "url": "https://example.com",
+            }
+        ]
+
+        ics_content = generator.generate_ics(events)
+
+        # Check all fields are present
+        assert "SUMMARY:Complete Event" in ics_content
+        assert "LOCATION:Test Location" in ics_content
+        assert "DESCRIPTION:Test Description" in ics_content
+        assert "URL:https://example.com" in ics_content
+        assert "DTSTART:20241220T140000" in ics_content
+        assert "DTEND:20241220T160000" in ics_content
+
+    def test_ics_generation_minimal_event(self):
+        """Test ICS generation with minimal required fields."""
+        generator = ICSGenerator()
+
+        events = [{"summary": "Minimal Event", "dtstart_date": "2024-12-20"}]
+
+        ics_content = generator.generate_ics(events)
+
+        # Check basic structure
+        assert "BEGIN:VCALENDAR" in ics_content
+        assert "END:VCALENDAR" in ics_content
+        assert "SUMMARY:Minimal Event" in ics_content
+        assert "DTSTART;VALUE=DATE:20241220" in ics_content  # All-day event format
 
     def test_file_output(self):
         """Test saving ICS to file."""
