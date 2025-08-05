@@ -125,14 +125,37 @@ else
     sed -i "s/^version = \".*\"/version = \"$NEW_VERSION\"/" pyproject.toml
 fi
 
-# Update version in source code (__init__.py files)
-echo -e "${BLUE}📝 Updating version in source code...${NC}"
-find . -name "__init__.py" -path "./src/*" -exec sed -i "s/__version__ = \".*\"/__version__ = \"$NEW_VERSION\"/" {} \;
+# Synchronize all version references using the sophisticated sync script
+echo -e "${BLUE}📝 Synchronizing all version references...${NC}"
+if [ -f scripts/sync_versions.py ]; then
+    if command -v python3 >/dev/null 2>&1; then
+        python3 scripts/sync_versions.py
+    elif command -v python >/dev/null 2>&1; then
+        python scripts/sync_versions.py
+    else
+        echo -e "${YELLOW}⚠️ Python not found, falling back to manual version sync...${NC}"
+        # Fallback to manual sync for __init__.py files
+        find . -name "__init__.py" -path "./src/*" -exec sed -i "s/__version__ = \".*\"/__version__ = \"$NEW_VERSION\"/" {} \;
+    fi
+else
+    echo -e "${YELLOW}⚠️ Version sync script not found, using manual sync...${NC}"
+    # Fallback to manual sync for __init__.py files
+    find . -name "__init__.py" -path "./src/*" -exec sed -i "s/__version__ = \".*\"/__version__ = \"$NEW_VERSION\"/" {} \;
+fi
 
 # Commit changes
 echo -e "${BLUE}📝 Committing changes...${NC}"
 git add pyproject.toml
+# Add all __init__.py files that might have been updated
 find . -name "__init__.py" -path "./src/*" -exec git add {} \;
+# Add any other files that might have been updated by the sync script
+if [ -f scripts/sync_versions.py ]; then
+    # Add any additional files that the sync script might have modified
+    git add -A
+else
+    # Just add the __init__.py files if sync script wasn't used
+    find . -name "__init__.py" -path "./src/*" -exec git add {} \;
+fi
 git commit -m "Release v$NEW_VERSION"
 
 # Create and push tag
