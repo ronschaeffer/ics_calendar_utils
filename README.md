@@ -1,7 +1,7 @@
 # 📅 ICS Calendar Utils
 
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![PyPI version](https://badge.fury.io/py/ics-calendar-utils.svg)](https://badge.fury.io/py/ics-calendar-utils)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![PyPI version](https://badge.fury.io/py/ronschaeffer-ics-calendar-utils.svg)](https://badge.fury.io/py/ronschaeffer-ics-calendar-utils)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Tests](https://github.com/ronschaeffer/ics_calendar_utils/workflows/CI/badge.svg)](https://github.com/ronschaeffer/ics_calendar_utils/actions)
 
@@ -10,17 +10,17 @@ A Python library for processing events and generating ICS calendar files from va
 ## ✨ Features
 
 - **Event Processing**: Normalize events from any source with customizable field mappings
-- **Date/Time Parsing**: Handles various date and time formats automatically
-- **Event Validation**: Built-in validation ensures data quality before calendar generation
-- **Statistics & Analytics**: Get insights about your event data
-- **Error Handling**: Graceful handling of invalid data with detailed error reporting
-- **ICS Generation**: Generates RFC 5545 compliant ICS calendar files
-- **Modern Python**: Built with Python 3.11+ type hints and best practices
+- **Date/Time Parsing**: Handles various date and time formats including midnight support
+- **Event Validation**: Data quality validation before calendar generation
+- **Statistics & Analytics**: Event data insights and processing statistics
+- **Error Handling**: Invalid data handling with detailed error reporting
+- **ICS Generation**: RFC 5545 compliant ICS calendar files
+- **Type Safety**: Python 3.10+ type hints for improved development experience
 
-## � Installation
+## 📦 Installation
 
 ```bash
-pip install ics-calendar-utils
+pip install ronschaeffer-ics-calendar-utils
 ```
 
 ## 🚀 Usage
@@ -46,7 +46,7 @@ events = [
     }
 ]
 
-# Simple field mapping
+# Field mapping configuration
 field_mapping = {
     'title': 'summary',
     'date': 'dtstart_date',
@@ -66,9 +66,7 @@ print("Calendar generated successfully!")
 
 ## ⚙️ Configuration
 
-### Advanced Usage
-
-For more control over processing and detailed results:
+### Field Mapping
 
 ```python
 from ics_calendar_utils import process_and_generate
@@ -104,7 +102,7 @@ result = process_and_generate(
     validate=True
 )
 
-# Access detailed information
+# Access processing statistics
 print(f"Processed {result['stats']['total_events']} events")
 print(f"Events with times: {result['stats']['events_with_time']}")
 print(f"Date range: {result['stats']['date_range']['earliest']} to {result['stats']['date_range']['latest']}")
@@ -113,9 +111,7 @@ if result['processing_errors']:
     print("Processing errors:", result['processing_errors'])
 ```
 
-### Low-Level API
-
-For maximum control:
+### Direct API Access
 
 ```python
 from ics_calendar_utils import EventProcessor, ICSGenerator
@@ -137,13 +133,11 @@ validation_errors = generator.validate_events(processed_events)
 if validation_errors:
     print("Validation issues:", validation_errors)
 
-# Generate ICS
+# Generate ICS content
 ics_content = generator.generate_ics(processed_events)
 ```
 
-## 🎯 Supported Date/Time Formats
-
-The library parses various date and time formats:
+## 🎯 Supported Formats
 
 ### Date Formats
 - ISO format: `2024-12-20`
@@ -158,14 +152,12 @@ The library parses various date and time formats:
 - Multiple times: `14:30 & 16:45`, `noon & midnight`
 - Flexible separators and spacing
 
-## 🧪 Error Handling
-
-The library provides error handling:
+## 🔧 Error Handling
 
 ```python
 result = process_and_generate(events, validate=True)
 
-# Check for issues
+# Check for processing issues
 if result['processing_errors']:
     print("Data processing issues:")
     for error in result['processing_errors']:
@@ -177,21 +169,7 @@ if result['validation_errors']:
         print(f"  - {error}")
 ```
 
-## 🛠️ Development
-
-### Setup
-
-```bash
-# Clone the repository
-git clone https://github.com/ronschaeffer/ics-calendar-utils.git
-cd ics-calendar-utils
-
-# Install with Poetry (recommended)
-poetry install
-
-# Or install in development mode
-pip install -e .
-```
+## 🧪 Testing
 
 ### Running Tests
 
@@ -202,7 +180,7 @@ poetry run pytest
 # Run with coverage
 poetry run pytest --cov=ics_calendar_utils
 
-# Run specific test
+# Run specific test file
 poetry run pytest tests/test_event_processor.py
 ```
 
@@ -219,6 +197,35 @@ poetry run ruff check
 poetry run ruff check --fix
 ```
 
+## 🛠️ Development
+
+### Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/ronschaeffer/ics-calendar-utils.git
+cd ics-calendar-utils
+
+# Install with Poetry
+poetry install
+
+# Install development dependencies
+poetry install --with dev
+```
+
+### Project Structure
+
+```
+ics_calendar_utils/
+├── src/ics_calendar_utils/    # Main package
+│   ├── event_processor.py     # Event data normalization
+│   ├── ics_generator.py       # ICS file generation
+│   └── __init__.py           # Public API
+├── tests/                    # Test suite
+├── examples/                 # Usage examples
+└── docs/                    # Documentation
+```
+
 ## 📋 Examples
 
 Check out the [`examples/`](examples/) directory for working examples:
@@ -227,21 +234,13 @@ Check out the [`examples/`](examples/) directory for working examples:
 - **Processing Examples**: Custom field mapping and error handling
 - **Rugby Fixtures**: Sports calendar example
 
-## Contributing
-
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
-
-## License
+## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Author
+## 🤝 Contributing
 
-- **ronschaeffer** - [GitHub](https://github.com/ronschaeffer)
-
-## Acknowledgments
-
----
+Contributions are welcome! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
 ## 📞 Support
 
