@@ -30,9 +30,9 @@ python-dotenv = "^1.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.12"
-pytest = "^8.0"
-pytest-cov = "^6.2"
-pre-commit = "^4.2.0"
+pytest = "^7.0"
+pytest-cov = "^4.0"
+pre-commit = "^3.0"
 
 [tool.poetry.urls]
 Homepage = "https://github.com/ronschaeffer/ics_calendar_utils"
