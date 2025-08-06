@@ -106,7 +106,6 @@ class TestEventProcessor:
             "invalid",
             "25:00",
             "12:60",
-            "midnight",  # Not supported like noon
         ]
 
         for invalid_input in invalid_cases:
@@ -122,6 +121,27 @@ class TestEventProcessor:
         # Test that "noon." gets processed (extracts "noon")
         result = processor.normalize_time("noon.")
         assert result == "12:00", "Should extract noon from 'noon.'"
+
+    def test_time_normalization_midnight_support(self):
+        """Test comprehensive midnight support."""
+        processor = EventProcessor()
+
+        # Test various midnight formats - all should return "00:00"
+        midnight_cases = [
+            ("midnight", "00:00"),
+            ("Midnight", "00:00"),
+            ("12 midnight", "00:00"),
+            ("midnight 12", "00:00"),
+            ("12midnight", "00:00"),  # No space version
+            ("Event at midnight", "00:00"),
+            ("12:00am", "00:00"),  # Standard format
+        ]
+
+        for input_time, expected in midnight_cases:
+            result = processor.normalize_time(input_time)
+            assert result == expected, (
+                f"Failed for {input_time}: got {result}, expected {expected}"
+            )
 
     def test_time_normalization_multiple_times(self):
         """Test time normalization with multiple times (should return first)."""

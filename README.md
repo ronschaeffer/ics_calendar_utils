@@ -153,8 +153,9 @@ The library parses various date and time formats:
 
 ### Time Formats
 - 24-hour: `14:30`, `09:00`
-- 12-hour: `2:30pm`, `9am`, `noon`
-- Multiple times: `14:30 & 16:45`
+- 12-hour: `2:30pm`, `9am`, `noon`, `midnight`
+- Special times: `noon`, `12 noon`, `midnight`, `12 midnight`
+- Multiple times: `14:30 & 16:45`, `noon & midnight`
 - Flexible separators and spacing
 
 ## 🧪 Error Handling
