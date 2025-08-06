@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Comprehensive midnight support for time normalization (midnight, 12 midnight, midnight 12, 12midnight)
+- Enhanced time parsing with improved error handling and validation logic
+- Updated documentation with midnight format examples
+
+### Changed
+- Improved time normalization function with more robust meridian handling
+- Enhanced docstring examples to include midnight formats
+
+## [0.1.2] - 2024-08-06
+
+### Added
 - Initial release of ICS Calendar Utils library
 - EventProcessor for intelligent event data normalization
 - ICSGenerator for standards-compliant ICS calendar file generation
