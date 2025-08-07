@@ -18,7 +18,7 @@ A Python library for processing events and generating ICS calendar files from va
 - **ICS Generation**: RFC 5545 compliant ICS calendar files
 - **Modern Python**: Built with Python 3.11+ type hints
 
-## � Installation
+## 💎 Installation
 
 ```bash
 pip install ics-calendar-utils
