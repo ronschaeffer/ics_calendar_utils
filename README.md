@@ -1,21 +1,22 @@
 # 📅 ICS Calendar Utils
 
+[![PyPI version](https://badge.fury.io/py/ronschaeffer-ics-calendar-utils.svg)](https://badge.fury.io/py/ronschaeffer-ics-calendar-utils)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![PyPI version](https://badge.fury.io/py/ics-calendar-utils.svg)](https://badge.fury.io/py/ics-calendar-utils)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Tests](https://github.com/ronschaeffer/ics_calendar_utils/workflows/CI/badge.svg)](https://github.com/ronschaeffer/ics_calendar_utils/actions)
+[![Code style: Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![CI](https://github.com/ronschaeffer/ics_calendar_utils/workflows/CI/badge.svg)](https://github.com/ronschaeffer/ics_calendar_utils/actions)
 
 A Python library for processing events and generating ICS calendar files from various data sources.
 
 ## ✨ Features
 
 - **Event Processing**: Normalize events from any source with customizable field mappings
-- **Date/Time Parsing**: Handles various date and time formats automatically
-- **Event Validation**: Built-in validation ensures data quality before calendar generation
-- **Statistics & Analytics**: Get insights about your event data
-- **Error Handling**: Graceful handling of invalid data with detailed error reporting
-- **ICS Generation**: Generates RFC 5545 compliant ICS calendar files
-- **Modern Python**: Built with Python 3.11+ type hints and best practices
+- **Date/Time Parsing**: Handles various date and time formats
+- **Event Validation**: Data quality validation before calendar generation
+- **Statistics & Analytics**: Event data insights and reporting
+- **Error Handling**: Detailed error reporting for invalid data
+- **ICS Generation**: RFC 5545 compliant ICS calendar files
+- **Modern Python**: Built with Python 3.11+ type hints
 
 ## � Installation
 
@@ -228,21 +229,39 @@ Check out the [`examples/`](examples/) directory for working examples:
 - **Processing Examples**: Custom field mapping and error handling
 - **Rugby Fixtures**: Sports calendar example
 
-## Contributing
+## 🧪 Testing
 
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+```bash
+# Run all tests
+poetry run pytest
 
-## License
+# Run with coverage
+poetry run pytest --cov=ics_calendar_utils
+
+# Run specific test
+poetry run pytest tests/test_event_processor.py
+```
+
+### Code Quality
+
+```bash
+# Format code
+poetry run ruff format
+
+# Lint code
+poetry run ruff check
+
+# Fix auto-fixable issues
+poetry run ruff check --fix
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please open an issue to discuss proposed changes or submit a pull request.
+
+## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Author
-
-- **ronschaeffer** - [GitHub](https://github.com/ronschaeffer)
-
-## Acknowledgments
-
----
 
 ## 📞 Support
 
