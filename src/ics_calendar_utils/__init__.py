@@ -8,7 +8,7 @@ RFC 5545 compliant ICS calendar files.
 from .event_processor import EventProcessor
 from .ics_generator import ICSGenerator
 
-__version__ = "0.1.3"
+__version__ = "0.2.1"
 __author__ = "ronschaeffer"
 __all__ = ["EventProcessor", "ICSGenerator", "create_calendar", "process_and_generate"]
 
