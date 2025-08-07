@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [project]
 name = "ronschaeffer-ics-calendar-utils"
-version = "0.2.1"
+version = "0.2.2"
 description = "Python utility library for generating and manipulating ICS calendar files"
 authors = [
     {name = "ronschaeffer", email = "ron@ronschaeffer.com"}
