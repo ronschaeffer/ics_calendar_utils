@@ -2,14 +2,16 @@
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.poetry]
+[project]
 name = "ronschaeffer-ics-calendar-utils"
 version = "0.1.2"
 description = "Python utility library for generating and manipulating ICS calendar files"
-authors = ["ronschaeffer"]
+authors = [
+    {name = "ronschaeffer", email = "ron@ronschaeffer.com"}
+]
 readme = "README.md"
-license = "MIT"
-keywords = ["python"]
+license = {text = "MIT"}
+keywords = ["python", "ics", "calendar", "events"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -18,24 +20,27 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
-packages = [{include = "ics_calendar_utils", from = "src"}]
+requires-python = ">=3.11"
+dependencies = [
+    "pyyaml>=6.0",
+    "python-dotenv>=1.0",
+]
 
-[tool.poetry.dependencies]
-python = "^3.11"
-pyyaml = "^6.0"
-python-dotenv = "^1.0"
-# Add your library dependencies here
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.12",
+    "pytest>=8.0",
+    "pytest-cov>=6.2",
+    "pre-commit>=4.2.0",
+]
 
-[tool.poetry.group.dev.dependencies]
-ruff = "^0.12"
-pytest = "^8.0"
-pytest-cov = "^6.2"
-pre-commit = "^4.2.0"
-
-[tool.poetry.urls]
+[project.urls]
 Homepage = "https://github.com/ronschaeffer/ics_calendar_utils"
 Repository = "https://github.com/ronschaeffer/ics_calendar_utils.git"
 Issues = "https://github.com/ronschaeffer/ics_calendar_utils/issues"
+
+[tool.poetry]
+packages = [{include = "ics_calendar_utils", from = "src"}]
 
 [tool.ruff]
 line-length = 88
@@ -45,7 +50,7 @@ src = ["src", "tests"]
 [tool.ruff.lint]
 select = [
     "E",    # pycodestyle errors
-    "W",    # pycodestyle warnings  
+    "W",    # pycodestyle warnings
     "F",    # pyflakes
     "I",    # isort
     "B",    # flake8-bugbear
