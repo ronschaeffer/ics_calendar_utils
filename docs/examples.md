@@ -1,33 +1,25 @@
-# Ics Calendar Utils Examples
+# ICS Calendar Utils Examples
 
 This document contains usage examples for ics_calendar_utils.
 
-## Python API Usage
+## Basic Usage
 
-### Basic Usage
+See the complete working example in `examples/basic_usage.py` which demonstrates:
 
-```python
-import ics_calendar_utils
+- Creating calendars with simple event data
+- Advanced event processing with complex field mappings
+- Rugby fixture processing with venue normalization
+- Work calendar generation with different date formats
 
-# Add your API examples here
+## Running the Example
+
+```bash
+cd examples
+python basic_usage.py
 ```
 
-### Configuration
+This will generate sample ICS files demonstrating the library's capabilities.
 
-```python
-from ics_calendar_utils.config import config
+## API Reference
 
-# Get configuration values
-app_name = config.get('app.name')
-debug_mode = config.get('app.debug', False)
-
-# Set configuration values
-config.set('app.debug', True)
-config.save()
-```
-
-### Advanced Usage
-
-```python
-# Add more complex examples here
-```
+For detailed API documentation, see the main [README.md](../README.md).

@@ -59,16 +59,7 @@ class EventProcessor:
         if not time_str or time_str.lower() == "tbc":
             return None
 
-        time_str = time_str.lower()
-
-        # Handle specific midnight patterns first to avoid duplicates
-        time_str = re.sub(r"\b12\s*midnight\b", "12:00am", time_str)
-        time_str = re.sub(r"\bmidnight\s*12\b", "12:00am", time_str)
-        # Then handle standalone midnight
-        time_str = time_str.replace("midnight", "12:00am")
-
-        # Handle noon patterns
-        time_str = time_str.replace("noon", "12:00pm")
+        time_str = time_str.lower().replace("noon", "12:00pm")
         time_str = re.sub(r"\s*\(tbc\)", "", time_str, flags=re.IGNORECASE)
         time_str = time_str.replace(".", ":")
         time_str = time_str.replace(" and ", " & ")
