@@ -45,6 +45,7 @@ packages = [{include = "ics_calendar_utils", from = "src"}]
 [tool.ruff]
 line-length = 88
 target-version = "py311"
+required-version = ">=0.12.0"
 src = ["src", "tests"]
 
 [tool.ruff.lint]
@@ -63,6 +64,15 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**/*" = ["S101"]  # allow assert in tests
+
+[tool.ruff.lint.isort]
+force-sort-within-sections = true
+combine-as-imports = true
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
