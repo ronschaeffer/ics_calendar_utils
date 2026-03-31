@@ -37,6 +37,10 @@ examples/                usage examples
 
 Via GitHub Actions on version tag push. See `.github/workflows/publish.yml`.
 
+## MQTT testing
+
+`mqtt_test_harness` at `/root/dev/python/mqtt_test_harness` is available for MQTT integration testing across workspace projects.
+
 ## Coding conventions
 
 - Line length: 88, quote style: double
